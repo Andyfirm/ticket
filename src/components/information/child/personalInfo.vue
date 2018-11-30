@@ -39,7 +39,7 @@ export default {
   },
   methods: {
     async getInfo() {
-      const { data: res } = await this.$http.get('taiji/getInfAcdByCard', {
+      const { data: res } = await this.$http.get('ticket/getInfAcdByCard', {
         params: { cardIndex: this.cardIndex }
       })
       console.log(res)

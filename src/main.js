@@ -17,8 +17,8 @@ Vue.use(ElementUI)
 Vue.config.productionTip = false
 Vue.prototype.$http = Axios
 Vue.prototype.qs = qs
-// https://www.easyserp.com/taijipay  http://192.168.1.180/weixinPay/
-Axios.defaults.baseURL = 'https://www.easyserp.com:8087/taiji'
+// https://www.easyserp.com/taijipay  http://192.168.1.180/weixinPay/  https://www.easyserp.com:8087/taiji
+Axios.defaults.baseURL = 'http://192.168.1.180/weixinPay/'
 Axios.interceptors.response.use(
   res => {
     return res

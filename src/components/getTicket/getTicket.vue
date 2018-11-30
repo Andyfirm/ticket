@@ -8,7 +8,11 @@
     <div class="container">
       <div class="contentBox">
         <ul v-if="list.length!==0" class="ticketInfo">
-          <li v-for="(item,index) of list" :key="item.ticketId" @click="selected(index,item.selected,item.ticketId)">
+          <li
+            v-for="(item,index) of list"
+            :key="item.ticketId"
+            @click="selected(index,item.selected,item.ticketId)"
+          >
             <div class="name">{{item.ticketName}}</div>
             <div class="icon" :class="{selected: item.selected === true}"></div>
             <div class="gettime">{{item.printingTime}}</div>
@@ -16,15 +20,20 @@
           </li>
         </ul>
         <!-- 为空的提示语 -->
-        <div v-if="list.length===0" class="marked">
-          暂无购买记录
-        </div>
+        <div v-if="list.length===0" class="marked">暂无购买记录</div>
         <div v-if="list.length!==0" class="pageBox">
           <div class="qbxz" @click="qbxz">全部选择</div>
           <div class="qbqx" @click="qbqx">全部取消</div>
           <!-- 分页器 -->
-          <el-pagination background layout="prev, pager, next" :total="num" :page-size="5" prev-text="上一页" next-text="下一页" @current-change="getPageList">
-          </el-pagination>
+          <el-pagination
+            background
+            layout="prev, pager, next"
+            :total="num"
+            :page-size="5"
+            prev-text="上一页"
+            next-text="下一页"
+            @current-change="getPageList"
+          ></el-pagination>
         </div>
         <button v-if="list.length!==0" id="btn" @click="print">打印</button>
       </div>
@@ -38,6 +47,8 @@ export default {
   data() {
     return {
       cardIndex: this.$route.query.cardIndex,
+      serialnumber: this.$route.query.serialnumber,
+      type: this.$route.query.type,
       time: 119,
       i: null,
       num: this.$route.query.data.num,
@@ -54,21 +65,48 @@ export default {
   },
   methods: {
     async getPageList(pageNum) {
-      const { data: res } = await this.$http.get('taiji/getTicketHistoryByCard', {
-        params: { cardIndex: this.cardIndex, pageNo: pageNum - 1, pageSize: 5 }
-      })
-      if (res.msg === 'success') {
-        let data = res.data
-        for (let i = 0; i < data.ticketInfo.length; i++) {
-          data.ticketInfo[i].selected = false
-          for (let j = 0; j < this.selectList.length; j++) {
-            if (data.ticketInfo[i].ticketId === this.selectList[j].ticketId) {
-              data.ticketInfo[i].selected = true
+      if (this.type === 'qrcode') {
+        const { data: res } = await this.$http.get('ticket/getTicketHistoryByCard', {
+          params: {
+            serialnumber: this.serialnumber,
+            pageNo: pageNum - 1,
+            pageSize: 5
+          }
+        })
+        if (res.msg === 'success') {
+          let data = res.data
+          for (let i = 0; i < data.ticketInfo.length; i++) {
+            data.ticketInfo[i].selected = false
+            for (let j = 0; j < this.selectList.length; j++) {
+              if (data.ticketInfo[i].ticketId === this.selectList[j].ticketId) {
+                data.ticketInfo[i].selected = true
+              }
             }
           }
+          this.num = data.num
+          this.list = data.ticketInfo
         }
-        this.num = data.num
-        this.list = data.ticketInfo
+      } else if (this.type !== 'qrcode') {
+        const { data: res } = await this.$http.get('ticket/getTicketHistoryByCard', {
+          params: {
+            cardIndex: this.cardIndex,
+            pageNo: pageNum - 1,
+            pageSize: 5
+          }
+        })
+        if (res.msg === 'success') {
+          let data = res.data
+          for (let i = 0; i < data.ticketInfo.length; i++) {
+            data.ticketInfo[i].selected = false
+            for (let j = 0; j < this.selectList.length; j++) {
+              if (data.ticketInfo[i].ticketId === this.selectList[j].ticketId) {
+                data.ticketInfo[i].selected = true
+              }
+            }
+          }
+          this.num = data.num
+          this.list = data.ticketInfo
+        }
       }
     },
     // 打印
@@ -77,7 +115,10 @@ export default {
         type: 'getTicket',
         ticketInfo: this.selectList
       }
-      this.$router.push({ name: 'succeed', query: { data: dataObj, type: 'get' } })
+      this.$router.push({
+        name: 'succeed',
+        query: { data: dataObj, type: 'get' }
+      })
     },
     // 倒计时
     getTime() {

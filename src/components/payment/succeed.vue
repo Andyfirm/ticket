@@ -1,58 +1,30 @@
 <template>
   <div id="succeed">
-    <router-link
-      :to="{name: 'index'}"
-      class="back"
-      v-if="success"
-    >首页</router-link>
-    <div
-      class="back"
-      @click="back"
-      v-else
-    >取消</div>
+    <router-link :to="{name: 'index'}" class="back" v-if="success">首页</router-link>
+    <div class="back" @click="back" v-else>取消</div>
     <div class="successBox">
-      <div
-        class="successimg"
-        v-if="success"
-      ><img
-          src="/static/images/success.gif"
-          alt=""
-        ></div>
-      <div
-        class="successimg"
-        v-if="error"
-      ><img
-          src="/static/images/error.png"
-          alt=""
-        ></div>
-      <div
-        class="successimg"
-        v-if="success === false"
-      ><img
-          src="/static/images/success1.gif"
-          alt=""
-        ></div>
+      <div class="successimg" v-if="success">
+        <img src="/static/images/success.gif" alt>
+      </div>
+      <div class="successimg" v-if="error">
+        <img src="/static/images/error.png" alt>
+      </div>
+      <div class="successimg" v-if="success === false">
+        <img src="/static/images/success1.gif" alt>
+      </div>
       <span v-if="success">出票成功</span>
       <span v-if="error">出票失败</span>
       <span v-if="success === false&&type!=='get'">支付成功，正在出票</span>
       <span v-if="success === false&&type==='get'">正在出票</span>
     </div>
-    <p
-      class="tishi"
-      v-if="success"
-    >请拿好您的票</p>
-    <p
-      class="tishi"
-      v-if="error&&!jksbh"
-    >请联系服务人员</p>
-    <p
-      class="tishi error"
-      v-if="error&&jksbh"
-    >打印二维码时出现错误<br>（错误码:{{jksbh}}）<br>请联系服务人员以获得帮助</p>
-    <p
-      class="tishi"
-      v-if="success === false"
-    >正在打印，请稍候</p>
+    <p class="tishi" v-if="success">请拿好您的票</p>
+    <p class="tishi" v-if="error&&!jksbh">请联系服务人员</p>
+    <p class="tishi error" v-if="error&&jksbh">打印二维码时出现错误
+      <br>
+      （错误码:{{jksbh}}）
+      <br>请联系服务人员以获得帮助
+    </p>
+    <p class="tishi" v-if="success === false">正在打印，请稍候</p>
   </div>
 </template>
 
@@ -90,16 +62,12 @@ export default {
         console.log(res)
         if (res.msg === 'success') {
           this.success = true
-          this.timeout = setTimeout(() => {
-            this.$router.push({ name: 'index' })
-          }, 10000)
+          this.timeout = setTimeout(() => this.$router.push({ name: 'index' }), 10000)
         } else if (res.msg === 'fail') {
           this.jksbh = res.jksbh
           this.error = true
           this.success = null
-          this.timeout = setTimeout(() => {
-            this.$router.push({ name: 'index' })
-          }, 60000)
+          this.timeout = setTimeout(() => this.$router.push({ name: 'index' }), 60000)
         }
       } catch (error) {
         this.jksbh = this.data.jksbh

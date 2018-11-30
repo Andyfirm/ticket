@@ -5,7 +5,7 @@
       <div class="text_r">{{time}}</div>
     </div>
     <div class="fb_bar">
-      <span ref="scrolltext">欢迎光临太极运动中心</span>
+      <span ref="scrolltext">欢迎光临太极体育中心</span>
     </div>
   </div>
 </template>

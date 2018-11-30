@@ -74,7 +74,7 @@ export default {
   },
   methods: {
     async getList() {
-      const { data: res } = await this.$http.get('taiji/getAllTicketInfo')
+      const { data: res } = await this.$http.get('ticket/getAllTicketInfo')
       if (res.msg === 'success') {
         this.topList = res.data
       }

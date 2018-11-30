@@ -1,27 +1,41 @@
 <template>
-  <div id="memberDiscern">
+  <div id="qrcodeScan">
     <div class="topBox">
-      <router-link :to="{name: 'index'}" class="back">取消</router-link>
+      <router-link
+        :to="{name: 'index'}"
+        class="back"
+      >取消</router-link>
       <span class="time">{{time}}s</span>
     </div>
-    <h6>请将会员卡放到识别区</h6>
-    <div class="card"><img src="/static/images/carddiscern.gif" alt=""></div>
+    <h6>请将二维码放到识别区</h6>
+    <div class="card"><img
+        src="/static/images/ticketScan.gif"
+        alt=""
+      ></div>
     <!-- 隐藏域文本输入 -->
-    <input type="text" class="hykInput" ref="hykInput" @keyup="autoComplete($event)">
+    <input
+      type="text"
+      class="qrcodeInput"
+      ref="qrcodeInput"
+      @keyup="autoComplete($event)"
+    >
     <!-- 验证支付结果 -->
-    <div class="yanzheng" v-if="yanzheng">正在读取信息，请稍后</div>
+    <div
+      class="yanzheng"
+      v-if="yanzheng"
+    >正在读取信息，请稍后</div>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'memberDiscern',
+  name: 'qrcodeScan',
   data() {
     return {
       time: 119,
       timer: null,
       yanzheng: false,
-      type: this.$route.query.type
+      isOpen: true
     }
   },
   created() {
@@ -32,57 +46,60 @@ export default {
   },
   mounted() {
     setTimeout(() => {
-      this.$refs.hykInput.focus()
+      this.$refs.qrcodeInput.focus()
     }, 100)
   },
   methods: {
-    // 读取会员卡信息
     async autoComplete(event) {
+      // 二维码取票请求
       if (event.keyCode === 13) {
         let value = event.target.value
         event.target.value = null
         this.yanzheng = true
-        // 判断类型是否为取票
-        if (this.type === 'qupiao') {
-          // 验证卡号是否存在
-          const { data: res1 } = await this.$http.get('ticket/getInfAcdByCard', {
-            params: { cardIndex: value }
-          })
-          // 不存在 提示错误信息
-          if (res1.msg === 'fail') {
-            this.yanzheng = false
-            this.$message.error(res1.data)
-            return
+        this.isOpen = false
+        // 正则验证TODO
+        // let reg = /^([1][0|1|2|3|4|5])/
+        // let regValue = reg.test(value)
+        // if (!regValue) {
+        //   this.$message.error('二维码错误，请出示正确的二维码')
+        //   this.yanzheng = false
+        //   return
+        // }
+        console.log(value)
+        const { data: res } = await this.$http.get(
+          'ticket/getTicketHistoryByCode',
+          {
+            params: { serialnumber: value, pageNo: 0, pageSize: 5 }
           }
-          // 存在 发送异步请求
-          const { data: res } = await this.$http.get('ticket/getTicketHistoryByCard', {
-            params: { cardIndex: value, pageNo: 0, pageSize: 5 }
-          })
-          this.yanzheng = false
-          if (res.msg === 'success') {
+        )
+        this.isOpen = true
+        if (res.msg === 'success') {
+          // 若长度为1的话，请求成功后开始打印
+          console.log(res)
+          if (res.data.ticketInfo.length === 1) {
+            let dataObj = {
+              type: 'getTicket',
+              ticketInfo: res.data.ticketInfo
+            }
+            this.$router.push({
+              name: 'succeed',
+              query: { data: dataObj, type: 'get' }
+            })
+          } else {
+            // 大于1则跳转至分页
             let data = res.data
             for (let i = 0; i < data.ticketInfo.length; i++) {
               data.ticketInfo[i].selected = false // 手动添加选中的状态
             }
             clearInterval(this.timer)
-            this.$router.push({ name: 'getTicket', query: { cardIndex: value, data } })
-          } else {
-            this.$message.error(res.data)
+            this.$router.push({
+              name: 'getTicket',
+              query: { serialnumber: value, data, type: 'qrcode' }
+            })
           }
-        }
-        // 查询
-        if (this.type === 'chaxun') {
+        } else {
           this.yanzheng = false
-          // 验证卡号是否存在
-          const { data: res } = await this.$http.get('ticket/getInfAcdByCard', {
-            params: { cardIndex: value }
-          })
-          if (res.msg === 'success') {
-            clearInterval(this.timer)
-            this.$router.push({ name: 'information', query: { cardIndex: value } })
-          } else {
-            this.$message.error(res.data)
-          }
+          this.$message.error(res.data)
         }
       }
     },
@@ -101,7 +118,7 @@ export default {
 </script>
 
 <style scoped>
-#memberDiscern {
+#qrcodeScan {
   position: relative;
   width: 100%;
   height: 6.1rem;
@@ -152,7 +169,7 @@ h6 {
 .card img {
   width: 100%;
 }
-.hykInput {
+.qrcodeInput {
   outline: none;
   border: 0;
   color: #fff;

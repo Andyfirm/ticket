@@ -218,7 +218,7 @@ export default {
           let reg = /^([1][0|1|2|3|4|5])/
           let regValue = reg.test(value)
           if (regValue) {
-            const { data: res } = await this.$http.get('taiji/passivePay', {
+            const { data: res } = await this.$http.get('ticket/passivePay', {
               params: {
                 num: this.ticketNumber,
                 total: this.totalMoney,
@@ -248,7 +248,7 @@ export default {
           let regValue = reg.test(value)
           let regValue1 = reg1.test(value)
           if (regValue || regValue1) {
-            const { data: res } = await this.$http.get('taiji/passivePay', {
+            const { data: res } = await this.$http.get('ticket/passivePay', {
               params: {
                 num: this.ticketNumber,
                 total: this.totalMoney,
@@ -273,7 +273,7 @@ export default {
           }
         }
         if (str === 'hyk') {
-          const { data: res } = await this.$http.get('taiji/memberBuyTicket', {
+          const { data: res } = await this.$http.get('ticket/memberBuyTicket', {
             params: {
               total: this.totalMoney,
               Cardindex: value,

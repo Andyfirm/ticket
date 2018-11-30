@@ -9,6 +9,8 @@ import payment from '@/components/payment/payment'
 import succeed from '@/components/payment/succeed'
 import myfooter from '@/components/footer'
 import memberDiscern from '@/components/memberDiscern/memberDiscern'
+import qrcodeScan from '@/components/memberDiscern/qrcodeScan'
+import getTicketType from '@/components/memberDiscern/getTicketType'
 import information from '@/components/information/information'
 import personalInfo from '@/components/information/child/personalInfo'
 import xfjl from '@/components/information/child/xfjl'
@@ -87,9 +89,29 @@ export default new Router({
         myfooter: myfooter
       },
       children: [
-        {path: 'personalInfo', name: 'personalInfo', component: personalInfo},
-        {path: 'xfjl', name: 'xfjl', component: xfjl}
+        { path: 'personalInfo', name: 'personalInfo', component: personalInfo },
+        { path: 'xfjl', name: 'xfjl', component: xfjl }
       ]
+    },
+    {
+      path: '/qrcodeScan',
+      name: 'qrcodeScan',
+      components: {
+        default: banner,
+        annunciate: annunciate,
+        index: qrcodeScan,
+        myfooter: myfooter
+      }
+    },
+    {
+      path: '/getTicketType',
+      name: 'getTicketType',
+      components: {
+        default: banner,
+        annunciate: annunciate,
+        index: getTicketType,
+        myfooter: myfooter
+      }
     }
   ]
 })

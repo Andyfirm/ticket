@@ -40,7 +40,7 @@ export default {
   methods: {
     async getPageList(pageNum) {
       let pageNums = pageNum - 1 || 0
-      const { data: res } = await this.$http.get('taiji/getInfAcByCard', {
+      const { data: res } = await this.$http.get('ticket/getInfAcByCard', {
         params: {
           cardIndex: this.cardIndex,
           pageNo: pageNums,
