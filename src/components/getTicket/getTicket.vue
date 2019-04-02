@@ -66,7 +66,7 @@ export default {
   methods: {
     async getPageList(pageNum) {
       if (this.type === 'qrcode') {
-        const { data: res } = await this.$http.get('ticket/getTicketHistoryByCard', {
+        const { data: res } = await this.$http.get('ticket/getTicketHistoryByCode', {
           params: {
             serialnumber: this.serialnumber,
             pageNo: pageNum - 1,
@@ -142,13 +142,12 @@ export default {
           return item.ticketId !== this.list[index].ticketId
         })
       }
-      console.log(this.selectList)
     },
     // 全选
     qbxz() {
       for (let i = 0; i < this.list.length; i++) {
         this.list[i].selected = true
-        // 预留追加所需数据到新数组中
+        // 追加所需数据到新数组中
         this.selectList.push(this.list[i])
       }
       let arr = this.selectList
@@ -162,7 +161,6 @@ export default {
         }
       }
       this.selectList = arr
-      console.log(this.selectList)
     },
     // 取消全选
     qbqx() {
@@ -175,7 +173,6 @@ export default {
           return item.ticketId !== this.list[j].ticketId
         })
       }
-      console.log(this.selectList)
     }
   }
 }
@@ -192,11 +189,11 @@ export default {
   padding-top: 0.33rem;
 }
 .topBox p {
-  font-size: 30px;
   line-height: 30px;
-  color: #333;
-  text-align: center;
   padding-bottom: 0.22rem;
+  font-size: 30px;
+  text-align: center;
+  color: #333;
 }
 .back {
   position: absolute;
@@ -207,9 +204,9 @@ export default {
   height: 0.45rem;
   line-height: 0.45rem;
   font-size: 26px;
-  color: #fff;
   text-align: center;
   text-decoration: none;
+  color: #fff;
   background-color: #f39800;
   border-radius: 8px;
 }
@@ -226,8 +223,8 @@ export default {
   width: 100%;
   height: 1.05rem;
   padding: 0 1.43rem;
-  box-sizing: border-box;
   margin-bottom: 0.45rem;
+  box-sizing: border-box;
 }
 .paymentMode > div {
   float: left;
@@ -245,14 +242,14 @@ export default {
 .contentBox {
   width: 100%;
   height: 100%;
-  border: 1px solid #ccc;
   padding: 0.2rem;
+  border: 1px solid #ccc;
   box-sizing: border-box;
 }
 .ticketInfo {
+  height: 3.78rem;
   font-size: 20px;
   color: #333;
-  height: 3.78rem;
 }
 .ticketInfo li {
   height: 0.65rem;
@@ -314,9 +311,9 @@ export default {
   border-radius: 8px;
 }
 .marked {
+  margin-top: 1.6rem;
   font-size: 40px;
   text-align: center;
-  margin-top: 1.6rem;
   color: #ccc;
 }
 </style>

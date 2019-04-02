@@ -18,6 +18,7 @@
           <p>取票</p>
           <button class="btn_free">领取优惠券</button>
         </div>
+        <!-- <p class="ceshitishi">测试阶段，请勿支付</p> -->
       </div>
     </div>
   </div>
@@ -48,7 +49,6 @@ export default {
 .content {
   width: 100%;
   height: 100%;
-  /* background-color: skyblue; */
 }
 .content > div {
   overflow: hidden;
@@ -66,13 +66,21 @@ export default {
 }
 .content button {
   outline: none;
-  background: orange;
-  border-radius: 15px;
-  font-size: 20px;
-  color: #fff;
   width: 100%;
   padding: 20px;
   margin-top: 70%;
+  font-size: 20px;
   text-align: center;
+  color: #fff;
+  background: orange;
+  border-radius: 15px;
+}
+.ceshitishi {
+  width: 4rem;
+  position: absolute;
+  top: 7rem;
+  left: 1.8rem;
+  font-size: 42px !important;
+  color: red;
 }
 </style>

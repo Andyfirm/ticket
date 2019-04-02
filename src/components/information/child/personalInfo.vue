@@ -42,7 +42,6 @@ export default {
       const { data: res } = await this.$http.get('ticket/getInfAcdByCard', {
         params: { cardIndex: this.cardIndex }
       })
-      console.log(res)
       if (res.msg === 'success') {
         this.data = res.data
       }

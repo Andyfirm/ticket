@@ -52,8 +52,8 @@ export default {
 }
 .logo {
   position: absolute;
-  bottom: 0.5rem;
   right: 0.36rem;
+  bottom: 0.5rem;
   width: 2.62rem;
   height: 0.43rem;
   z-index: 1;

@@ -2,7 +2,7 @@
   <div id="qrcodeScan">
     <div class="topBox">
       <router-link
-        :to="{name: 'index'}"
+        :to="{name: 'getTicketType'}"
         class="back"
       >取消</router-link>
       <span class="time">{{time}}s</span>
@@ -57,15 +57,6 @@ export default {
         event.target.value = null
         this.yanzheng = true
         this.isOpen = false
-        // 正则验证TODO
-        // let reg = /^([1][0|1|2|3|4|5])/
-        // let regValue = reg.test(value)
-        // if (!regValue) {
-        //   this.$message.error('二维码错误，请出示正确的二维码')
-        //   this.yanzheng = false
-        //   return
-        // }
-        console.log(value)
         const { data: res } = await this.$http.get(
           'ticket/getTicketHistoryByCode',
           {
@@ -75,7 +66,6 @@ export default {
         this.isOpen = true
         if (res.msg === 'success') {
           // 若长度为1的话，请求成功后开始打印
-          console.log(res)
           if (res.data.ticketInfo.length === 1) {
             let dataObj = {
               type: 'getTicket',
@@ -126,8 +116,8 @@ export default {
 }
 .topBox {
   position: relative;
-  padding-top: 0.33rem;
   height: 1rem;
+  padding-top: 0.33rem;
 }
 .back {
   position: absolute;
@@ -138,9 +128,9 @@ export default {
   height: 0.45rem;
   line-height: 0.45rem;
   font-size: 26px;
-  color: #fff;
   text-align: center;
   text-decoration: none;
+  color: #fff;
   background-color: #f39800;
   border-radius: 8px;
 }
@@ -154,12 +144,12 @@ export default {
   color: #f39800;
 }
 h6 {
-  font-size: 42px;
   line-height: 42px;
+  margin-bottom: 0.85rem;
+  font-size: 42px;
+  text-align: center;
   font-weight: 500;
   color: #000;
-  text-align: center;
-  margin-bottom: 0.85rem;
 }
 .card {
   width: 5rem;
@@ -170,21 +160,21 @@ h6 {
   width: 100%;
 }
 .qrcodeInput {
+  position: absolute;
   outline: none;
   border: 0;
   color: #fff;
-  position: absolute;
 }
 .yanzheng {
   position: absolute;
-  bottom: 0;
   left: 0;
+  bottom: 0;
   width: 100%;
   height: 7.1rem;
   line-height: 7.1rem;
   font-size: 26px;
-  color: #fff;
   text-align: center;
+  color: #fff;
   background-color: rgba(0, 0, 0, 0.55);
 }
 </style>

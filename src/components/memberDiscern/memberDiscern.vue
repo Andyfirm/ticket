@@ -1,7 +1,8 @@
 <template>
   <div id="memberDiscern">
     <div class="topBox">
-      <router-link :to="{name: 'index'}" class="back">取消</router-link>
+      <router-link :to="{name: 'getTicketType'}" class="back" v-if="type==='qupiao'">取消</router-link>
+      <router-link :to="{name: 'index'}" class="back" v-else>取消</router-link>
       <span class="time">{{time}}s</span>
     </div>
     <h6>请将会员卡放到识别区</h6>
@@ -109,8 +110,8 @@ export default {
 }
 .topBox {
   position: relative;
-  padding-top: 0.33rem;
   height: 1rem;
+  padding-top: 0.33rem;
 }
 .back {
   position: absolute;
@@ -121,28 +122,28 @@ export default {
   height: 0.45rem;
   line-height: 0.45rem;
   font-size: 26px;
-  color: #fff;
   text-align: center;
   text-decoration: none;
+  color: #fff;
   background-color: #f39800;
   border-radius: 8px;
 }
 .time {
   position: absolute;
-  right: 0.35rem;
   top: 0.25rem;
+  right: 0.35rem;
   display: block;
   font-size: 30px;
   font-weight: 700;
   color: #f39800;
 }
 h6 {
+  margin-bottom: 0.85rem;
   font-size: 42px;
   line-height: 42px;
   font-weight: 500;
   color: #000;
   text-align: center;
-  margin-bottom: 0.85rem;
 }
 .card {
   width: 5rem;
@@ -153,10 +154,10 @@ h6 {
   width: 100%;
 }
 .hykInput {
+  position: absolute;
   outline: none;
   border: 0;
   color: #fff;
-  position: absolute;
 }
 .yanzheng {
   position: absolute;

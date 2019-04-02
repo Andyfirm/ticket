@@ -48,8 +48,8 @@ export default {
   top: 50%;
   left: 7.42rem;
   margin-top: -20px;
-  color: #fff;
   font-size: 40px;
   white-space: nowrap;
+  color: #fff;
 }
 </style>

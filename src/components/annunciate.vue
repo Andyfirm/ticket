@@ -74,11 +74,11 @@ export default {
   overflow: hidden;
   width: 100%;
   height: 0.66rem;
-  background: rgba(0, 71, 157, 0.8);
   padding: 0 0.35rem;
-  box-sizing: border-box;
   font-size: 20px;
   color: #fff;
+  background: rgba(0, 71, 157, 0.8);
+  box-sizing: border-box;
 }
 .text_l {
   float: left;

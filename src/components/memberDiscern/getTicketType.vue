@@ -124,7 +124,6 @@ export default {
   width: 2.58rem;
   height: 2.18rem;
   margin: 0.57rem auto 0;
-  box-shadow: 3px 6px 20px 2px #ccc;
 }
 .imgBox img {
   width: 100%;

@@ -8,18 +8,37 @@
       <div class="top_box">
         <!-- 上侧项目一级选择 -->
         <ul class="top">
-          <li v-if="item.tbWxTicketList.length!==0" v-for="(item,index) of topList" :key="item.id" :class="{bgyellow: iTop === index}" @click="selectTop(index,item.ticket_type,item.id)">{{item.ticket_type}}</li>
-          <li v-if="item.tbWxTicketList.length===0" v-for="(item,index) of topList" :key="item.id" :class="{bgyellow: iTop === index}" style="background-color:#ccc;">{{item.ticket_type}}</li>
+          <li
+            v-if="item.tbWxTicketList.length!==0"
+            v-for="(item,index) of topList"
+            :key="item.id"
+            :class="{bgyellow: iTop === index}"
+            @click="selectTop(index,item.ticketType,item.id)"
+          >{{item.ticketType}}</li>
+          <li
+            v-if="item.tbWxTicketList.length===0"
+            v-for="(item,index) of topList"
+            :key="item.id"
+            :class="{bgyellow: iTop === index}"
+            style="background-color:#ccc;"
+          >{{item.ticketType}}</li>
         </ul>
       </div>
       <!-- 中部项目二级选择 -->
       <div class="bottom_box">
         <ul class="bottom">
-          <li v-for="(item,index) of bottomList" :key="index" :class="{bgblue: iBottom === index}" @click="selectBottom(index,item.name,item.price,item.id)">{{item.name}}</li>
+          <li
+            v-for="(item,index) of bottomList"
+            :key="index"
+            :class="{bgblue: iBottom === index}"
+            @click="selectBottom(index,item.name,item.price,item.id,item.begintime,item.endtime)"
+          >
+            <p>{{item.name}}</p>
+            <p>{{item.begintime.slice(0,5)}}-{{item.endtime.slice(0,5)}}</p>
+          </li>
         </ul>
         <div id="orderFrom" v-show="isShow">
           <div class="orderFrom_top">
-            <!-- <div class="back_icon" @click="backOrder"></div> -->
             <h6>订单信息</h6>
           </div>
           <div class="content">
@@ -30,9 +49,13 @@
             <div class="ticketName">
               <span>{{ticketName}}</span>
               <div class="right_number">
-                <div class="sub" @click="sub"><img :src="subImg" alt=""></div>
+                <div class="sub" @click="sub">
+                  <img :src="subImg" alt>
+                </div>
                 <span class="text">{{number}}</span>
-                <div class="add" @click="add"><img src="/static/images/add.png" alt=""></div>
+                <div class="add" @click="add">
+                  <img src="/static/images/add.png" alt>
+                </div>
               </div>
             </div>
             <p>结算详情：</p>
@@ -58,7 +81,7 @@ export default {
       topList: [],
       bottomList: [],
       iNumber: null,
-      iTop: null,
+      iTop: 0,
       iBottom: null,
       number: 1,
       money: 0,
@@ -66,7 +89,10 @@ export default {
       tickeToptName: '',
       tickeBottomtName: '',
       subImg: '/static/images/sub - false.png',
-      tishiText: '请选择项目'
+      tishiText: '请选择票类型',
+      querenxinxi: '',
+      begintime: '',
+      endtime: ''
     }
   },
   created() {
@@ -74,17 +100,49 @@ export default {
   },
   methods: {
     async getList() {
-      const { data: res } = await this.$http.get('ticket/getAllTicketInfo')
+      const { data: res } = await this.$http.get('ticket/getAllTicketInfo', {
+        params: { shopNum: 1003 }
+      })
       if (res.msg === 'success') {
         this.topList = res.data
+        this.tickeToptName = res.data[0].ticketType
+        this.bottomList = res.data[0].tbWxTicketList
       }
     },
     // 提交订单
     paymentBtn() {
-      this.$router.push({
-        name: 'payment',
-        query: { id: this.id, totalMoney: this.totalMoney, ticketNumber: this.number }
-      })
+      this.iBottom = null
+      let ymd = this.$moment(new Date()).format('YYYY-MM-DD')
+      let newDate = new Date().getTime()
+      let orginDate = new Date(ymd+ ' '+ this.begintime.slice(0, 5)).getTime()
+      let str
+      if(newDate < orginDate) {
+        str = '此票使用时间段为：' +
+          this.begintime.slice(0, 5) +
+          '-' +
+          this.endtime.slice(0, 5) +
+          ',一经售出概不退换，您确定要购买吗？'
+      }else {
+        str = '当前场次已开始，结束时间为' + this.endtime.slice(0, 5) + ',一经售出概不退换，您确定要购买吗？'
+      }
+      this.$confirm(
+        str,
+        '提示',
+        {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }
+      )
+        .then(() => {
+          this.$router.push({
+            name: 'payment',
+            query: { id: this.id, totalMoney: this.totalMoney, ticketNumber: this.number }
+          })
+        })
+        .catch(() => {
+          this.backOrder()
+        })
     },
     // 加减操作
     sub() {
@@ -117,21 +175,25 @@ export default {
       this.tishiText = '请选择票类型'
     },
     // 二级项目选择
-    selectBottom(index, item, price, id) {
+    selectBottom(index, item, price, id, begintime, endtime) {
       this.iBottom = index
       this.tickeBottomtName = item
       this.money = price
       this.id = id
+      this.begintime = begintime
+      this.endtime = endtime
     },
     // 返回清空
     backOrder() {
-      this.iTop = null
+      // this.iTop = null
       this.iBottom = null
       this.number = 1
-      this.tickeToptName = ''
-      this.tickeBottomtName = ''
-      this.bottomList = []
-      this.tishiText = '请选择项目'
+      // this.tickeToptName = ''
+      // this.tickeBottomtName = ''
+      // this.bottomList = []
+      this.begintime = ''
+      this.endtime = ''
+      this.tishiText = '请选择票类型'
     }
   },
   computed: {
@@ -174,7 +236,6 @@ export default {
   position: relative;
   overflow: hidden;
   width: 100%;
-  padding-top: 0.25rem;
   padding: 0 0.35rem;
   box-sizing: border-box;
 }
@@ -191,40 +252,41 @@ export default {
   width: 0.9rem;
   height: 0.45rem;
   line-height: 0.45rem;
-  color: #fff;
+  margin-bottom: 0.24rem;
   font-size: 14px;
-  background: #f39800;
-  border-radius: 8px;
   text-align: center;
   text-decoration: none;
-  margin-bottom: 0.24rem;
+  color: #fff;
+  background: #f39800;
+  border-radius: 8px;
 }
 ul.top li {
   float: left;
   width: 0.9rem;
   height: 0.45rem;
   line-height: 0.45rem;
-  font-size: 16px;
-  color: #fff;
-  text-align: center;
-  background-color: #f39800;
-  box-sizing: border-box;
-  border-radius: 8px;
   margin-right: 0.26rem;
   margin-bottom: 0.2rem;
+  font-size: 16px;
+  text-align: center;
+  color: #fff;
+  background-color: #f39800;
+  border-radius: 8px;
+  box-sizing: border-box;
 }
 .bottom li {
   float: left;
-  color: #fff;
   width: 0.9rem;
   height: 0.45rem;
-  line-height: 0.45rem;
+  line-height: 0.18rem;
+  padding-top: 0.06rem;
   margin-right: 0.26rem;
   margin-bottom: 0.1rem;
-  text-align: center;
   font-size: 16px;
-  border-radius: 8px;
+  text-align: center;
+  color: #fff;
   background-color: #00c8f3;
+  border-radius: 8px;
   box-sizing: border-box;
 }
 ul.top li:nth-child(6n) {
@@ -237,10 +299,10 @@ ul.top li:nth-child(6n) {
   position: absolute;
   left: 0.35rem;
   bottom: 0;
+  display: block;
   width: 6.72rem;
   height: 0.05rem;
   content: '';
-  display: block;
   background-color: #dcdcdc;
 }
 .bgblue {
@@ -257,12 +319,12 @@ ul.top li:nth-child(6n) {
   right: 0;
   top: 0;
   bottom: 0;
-  margin: auto;
   width: 3.85rem;
   height: 4.2rem;
+  padding: 0 0.25rem;
+  margin: auto;
   background-color: #eeeeee;
   border-radius: 8px;
-  padding: 0 0.25rem;
   box-sizing: border-box;
 }
 .orderFrom_top {
@@ -273,16 +335,16 @@ ul.top li:nth-child(6n) {
   position: absolute;
   left: 0;
   top: 50%;
-  margin-top: -0.15rem;
   width: 0.3rem;
   height: 0.3rem;
+  margin-top: -0.15rem;
   background: url('/static/images/back.png') no-repeat center/contain;
 }
 .orderFrom_top h6 {
+  margin: 0.22rem 0.09rem;
   font-size: 22px;
   font-weight: 500;
   text-align: center;
-  margin: 0.22rem 0.09rem;
   color: #f39800;
 }
 .content p {
@@ -292,10 +354,10 @@ ul.top li:nth-child(6n) {
 .ticketName,
 .ticketMoney {
   overflow: hidden;
-  font-size: 16px;
-  color: #666;
-  line-height: 0.25rem;
   margin: 0.17rem 0 0.25rem 0;
+  font-size: 16px;
+  line-height: 0.25rem;
+  color: #666;
 }
 .ticketName span,
 .ticketMoney span {
@@ -309,10 +371,10 @@ ul.top li:nth-child(6n) {
   margin: 0.17rem 0 0 0;
 }
 #totalMoney {
-  text-align: right;
-  font-size: 16px;
-  color: #f39800;
   margin-top: 0.18rem;
+  font-size: 16px;
+  text-align: right;
+  color: #f39800;
 }
 #comfirm,
 #cancel {
@@ -336,9 +398,9 @@ ul.top li:nth-child(6n) {
 }
 .sub,
 .add {
+  float: left;
   width: 0.25rem;
   height: 0.25rem;
-  float: left;
 }
 .sub img,
 .add img {
@@ -359,8 +421,8 @@ ul.top li:nth-child(6n) {
 .left_box p {
   margin-top: 0.05rem;
   margin-bottom: 0.34rem;
-  color: #f39800;
   text-align: center;
+  color: #f39800;
 }
 .xiangqing {
   overflow: hidden;

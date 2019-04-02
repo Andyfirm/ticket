@@ -8,6 +8,7 @@ import Axios from 'axios'
 import qs from 'qs'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
+import Moment from 'moment'
 
 // 注册轮播图
 Vue.component('swipe', Swipe)
@@ -16,9 +17,9 @@ Vue.component('annunciate', annunciate)
 Vue.use(ElementUI)
 Vue.config.productionTip = false
 Vue.prototype.$http = Axios
-Vue.prototype.qs = qs
-// https://www.easyserp.com/taijipay  http://192.168.1.180/weixinPay/  https://www.easyserp.com:8087/taiji
-Axios.defaults.baseURL = 'http://192.168.1.180/weixinPay/'
+Vue.prototype.qs = qs // https://www.easyserp.com/taijipay // http://192.168.1.180/weixinPay http://www.easyserp.com:8091/taijizf
+Axios.defaults.baseURL = 'https://www.easyserp.com/taijipay'
+Vue.prototype.$moment = Moment
 Axios.interceptors.response.use(
   res => {
     return res

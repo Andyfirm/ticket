@@ -56,10 +56,9 @@ export default {
           'weixinPay?method=wechatpayment',
           this.qs.stringify({ data: dataStr }),
           {
-            baseURL: 'http://192.168.1.21:8080/printTicket/' // printTicket/
+            baseURL: 'http://172.19.5.154:8080/printTicket/' // 
           }
         )
-        console.log(res)
         if (res.msg === 'success') {
           this.success = true
           this.timeout = setTimeout(() => this.$router.push({ name: 'index' }), 10000)
@@ -107,14 +106,14 @@ export default {
   border-radius: 8px;
 }
 .successBox {
+  display: flex;
+  justify-content: center;
   width: 100%;
   height: 1rem;
   padding: 0 1.9rem;
-  box-sizing: border-box;
   margin-bottom: 2.19rem;
-  display: flex;
-  justify-content: center;
   margin-top: 1.94rem;
+  box-sizing: border-box;
 }
 .successimg {
   float: left;
@@ -126,11 +125,11 @@ export default {
 }
 .successBox span {
   float: left;
+  margin-top: 0.32rem;
+  margin-left: 0.36rem;
   font-size: 36px;
   line-height: 56px;
   color: #333;
-  margin-top: 0.32rem;
-  margin-left: 0.36rem;
 }
 .tishi {
   font-size: 30px;
