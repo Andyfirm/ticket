@@ -14,6 +14,7 @@ import getTicketType from '@/components/memberDiscern/getTicketType'
 import information from '@/components/information/information'
 import personalInfo from '@/components/information/child/personalInfo'
 import xfjl from '@/components/information/child/xfjl'
+import realName from '@/components/realName/realName'
 
 Vue.use(Router)
 
@@ -110,6 +111,16 @@ export default new Router({
         default: banner,
         annunciate: annunciate,
         index: getTicketType,
+        myfooter: myfooter
+      }
+    },
+    {
+      path: '/realName',
+      name: 'realName',
+      components: {
+        default: banner,
+        annunciate: annunciate,
+        index: realName,
         myfooter: myfooter
       }
     }

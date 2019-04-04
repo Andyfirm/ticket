@@ -3,18 +3,18 @@
     <div class="contentBox">
       <div class="content">
         <div class="img1">
-          <router-link :to="{name: 'buyTicket'}"><img
-              src="/static/images/gp.png"
-              alt=""
-            ></router-link>
+          <router-link :to="{name: 'buyTicket'}">
+            <img src="/static/images/gp.png" alt>
+          </router-link>
           <p>购票</p>
-          <router-link :to="{name: 'memberDiscern', query: {type: 'chaxun'}}"><button class="btn_check">会员信息查询</button></router-link>
+          <router-link :to="{name: 'memberDiscern', query: {type: 'chaxun'}}">
+            <button class="btn_check">会员信息查询</button>
+          </router-link>
         </div>
         <div class="img2">
-          <router-link :to="{name: 'getTicketType', query: {type: 'qupiao'}}"><img
-              src="/static/images/qp.png"
-              alt=""
-            ></router-link>
+          <router-link :to="{name: 'getTicketType', query: {type: 'qupiao'}}">
+            <img src="/static/images/qp.png" alt>
+          </router-link>
           <p>取票</p>
           <button class="btn_free">领取优惠券</button>
         </div>
@@ -30,7 +30,16 @@ export default {
   data() {
     return {}
   },
-  created() {}
+  created() {
+    this.getIdInfo()
+  },
+  methods: {
+    async getIdInfo() {
+      const { data: res } = await this.$http.get('verified?method=getIdCardInfo', {
+        baseURL: 'http://172.19.4.142:8080/printTicket'
+      })
+    }
+  }
 }
 </script>
 

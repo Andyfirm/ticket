@@ -74,6 +74,7 @@ export default {
       id: this.$route.query.id,
       totalMoney: this.$route.query.totalMoney,
       ticketNumber: this.$route.query.ticketNumber,
+      userName: this.$route.query.userName,
       ticketInfo: '',
       timer: null,
       isOpen: true
@@ -151,7 +152,8 @@ export default {
                 authcode: value,
                 ticketInfo: this.ticketInfo,
                 payType: 'wx',
-                shopNum: 1003
+                shopNum: 1002,
+                name: this.userName
               }
             })
             this.yanzheng = false
@@ -181,7 +183,8 @@ export default {
                 authcode: value,
                 ticketInfo: this.ticketInfo,
                 payType: 'zfb',
-                shopNum: 1003
+                shopNum: 1002,
+                name: this.userName
               }
             })
             this.yanzheng = false
@@ -205,7 +208,7 @@ export default {
               total: this.totalMoney,
               Cardindex: value,
               ticketInfo: this.ticketInfo,
-              shopNum: 1003
+              shopNum: 1002
             })
           )
           this.yanzheng = false

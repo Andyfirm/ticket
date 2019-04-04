@@ -101,7 +101,7 @@ export default {
   methods: {
     async getList() {
       const { data: res } = await this.$http.get('ticket/getAllTicketInfo', {
-        params: { shopNum: 1003 }
+        params: { shopNum: 1002 }
       })
       if (res.msg === 'success') {
         this.topList = res.data
@@ -114,31 +114,41 @@ export default {
       this.iBottom = null
       let ymd = this.$moment(new Date()).format('YYYY-MM-DD')
       let newDate = new Date().getTime()
-      let orginDate = new Date(ymd+ ' '+ this.begintime.slice(0, 5)).getTime()
+      let orginDate = new Date(ymd + ' ' + this.begintime.slice(0, 5)).getTime()
       let str
-      if(newDate < orginDate) {
-        str = '此票使用时间段为：' +
+      if (newDate < orginDate) {
+        str =
+          '此票使用时间段为：' +
           this.begintime.slice(0, 5) +
           '-' +
           this.endtime.slice(0, 5) +
           ',一经售出概不退换，您确定要购买吗？'
-      }else {
-        str = '当前场次已开始，结束时间为' + this.endtime.slice(0, 5) + ',一经售出概不退换，您确定要购买吗？'
+      } else {
+        str =
+          '当前场次已开始，结束时间为' +
+          this.endtime.slice(0, 5) +
+          ',一经售出概不退换，您确定要购买吗？'
       }
-      this.$confirm(
-        str,
-        '提示',
-        {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }
-      )
-        .then(() => {
-          this.$router.push({
-            name: 'payment',
-            query: { id: this.id, totalMoney: this.totalMoney, ticketNumber: this.number }
-          })
+      this.$confirm(str, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(async () => {
+          // 发送打开身份验证的请求
+          // const { data: res } = await this.$http.get('')
+          // if (res.msg === 'success') {
+            this.$router.push({
+              name: 'realName',
+              query: { id: this.id, totalMoney: this.totalMoney, ticketNumber: this.number }
+            })
+          // } else {
+          //   this.$message({
+          //     showClose: true,
+          //     message: '网络繁忙，请稍后再试',
+          //     type: 'error'
+          //   })
+          // }
         })
         .catch(() => {
           this.backOrder()
