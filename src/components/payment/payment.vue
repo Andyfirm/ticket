@@ -46,7 +46,8 @@
       <!-- 隐藏域文本输入 -->
       <input type="text" class="hykInput" ref="hykInput" @keyup="autoComplete($event,'zfb')">
     </div>
-    <div class="qrcodehyk" v-if="hyk">请将会员卡放到识别区
+    <div class="qrcodehyk" v-if="hyk">
+      请将会员卡放到识别区
       <div class="img">
         <img src="/static/images/carddiscern.gif" alt>
       </div>
@@ -145,17 +146,18 @@ export default {
           let reg = /^([1][0|1|2|3|4|5])/
           let regValue = reg.test(value)
           if (regValue) {
-            const { data: res } = await this.$http.get('ticket/passivePay', {
-              params: {
+            const { data: res } = await this.$http.post(
+              'ticket/passivePay',
+              this.qs.stringify({
                 num: this.ticketNumber,
                 total: this.totalMoney,
                 authcode: value,
                 ticketInfo: this.ticketInfo,
                 payType: 'wx',
-                shopNum: 1002,
+                shopNum: 1001,
                 name: this.userName
-              }
-            })
+              })
+            )
             this.yanzheng = false
             this.isOpen = true
             if (res.msg === 'success') {
@@ -176,17 +178,17 @@ export default {
           let regValue = reg.test(value)
           let regValue1 = reg1.test(value)
           if (regValue || regValue1) {
-            const { data: res } = await this.$http.get('ticket/passivePay', {
-              params: {
+            const { data: res } = await this.$http.post('ticket/passivePay',
+            this.qs.stringify({
                 num: this.ticketNumber,
                 total: this.totalMoney,
                 authcode: value,
                 ticketInfo: this.ticketInfo,
                 payType: 'zfb',
-                shopNum: 1002,
+                shopNum: 1001,
                 name: this.userName
-              }
-            })
+              })
+            )
             this.yanzheng = false
             this.isOpen = true
             if (res.msg === 'success') {
@@ -208,7 +210,7 @@ export default {
               total: this.totalMoney,
               Cardindex: value,
               ticketInfo: this.ticketInfo,
-              shopNum: 1002
+              shopNum: 1001
             })
           )
           this.yanzheng = false

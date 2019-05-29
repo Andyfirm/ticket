@@ -56,7 +56,7 @@ export default {
           'weixinPay?method=wechatpayment',
           this.qs.stringify({ data: dataStr }),
           {
-            baseURL: 'http://172.19.4.142:8080/printTicket/' // 
+            baseURL: 'http://localhost:8080/printTicket/' //
           }
         )
         if (res.msg === 'success') {

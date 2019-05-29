@@ -31,12 +31,12 @@ export default {
     return {}
   },
   created() {
-    this.getIdInfo()
+    // this.getIdInfo()
   },
   methods: {
     async getIdInfo() {
       const { data: res } = await this.$http.get('verified?method=getIdCardInfo', {
-        baseURL: 'http://172.19.4.142:8080/printTicket'
+        baseURL: 'http://localhost:8080/printTicket' // http://172.19.4.142:8080/printTicket
       })
     }
   }

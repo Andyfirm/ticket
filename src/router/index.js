@@ -28,7 +28,8 @@ export default new Router({
         annunciate: annunciate,
         index: index,
         myfooter: myfooter
-      }
+      },
+      meta: {keepAlive: true }
     },
     {
       path: '/buyTicket',

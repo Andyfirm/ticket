@@ -101,7 +101,7 @@ export default {
   methods: {
     async getList() {
       const { data: res } = await this.$http.get('ticket/getAllTicketInfo', {
-        params: { shopNum: 1002 }
+        params: { shopNum: 1001 }
       })
       if (res.msg === 'success') {
         this.topList = res.data
@@ -135,20 +135,23 @@ export default {
         type: 'warning'
       })
         .then(async () => {
-          // 发送打开身份验证的请求
-          // const { data: res } = await this.$http.get('')
-          // if (res.msg === 'success') {
-            this.$router.push({
-              name: 'realName',
-              query: { id: this.id, totalMoney: this.totalMoney, ticketNumber: this.number }
+          this.$confirm('如需开发票，请点击确认，拿身份证进行实名认证，支付成功后联系前台工作人员。如不需要，请点击取消进行支付。', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          })
+            .then(async () => {
+              this.$router.push({
+                name: 'realName',
+                query: { id: this.id, totalMoney: this.totalMoney, ticketNumber: this.number }
+              })
             })
-          // } else {
-          //   this.$message({
-          //     showClose: true,
-          //     message: '网络繁忙，请稍后再试',
-          //     type: 'error'
-          //   })
-          // }
+            .catch(() => {
+              this.$router.push({
+                name: 'payment',
+                query: { id: this.id, totalMoney: this.totalMoney, ticketNumber: this.number }
+              })
+            })
         })
         .catch(() => {
           this.backOrder()

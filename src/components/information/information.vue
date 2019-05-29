@@ -82,6 +82,7 @@ export default {
   color: #f39800;
 }
 .container {
+  overflow: scroll;
   width: 6.72rem;
   height: 4.95rem;
   margin: 0 auto;

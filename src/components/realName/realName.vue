@@ -5,7 +5,7 @@
       <span class="time">{{time}}s</span>
     </div>
     <div class="container">
-      <p>因场馆方相关规定，在您购票前需要验证您的身份，谢谢您的配合！</p>
+      <p>因场馆方相关规定，在您办理发票前需要验证您的身份，谢谢您的配合！</p>
       <h6>请将身份证放到识别区</h6>
       <div class="imgBox">
         <img src="../../../static/images/id.gif" alt>
@@ -27,7 +27,7 @@ export default {
       id: this.$route.query.id,
       totalMoney: this.$route.query.totalMoney,
       ticketNumber: this.$route.query.ticketNumber,
-      socket: new WebSocket('ws://172.19.4.142:8080/printTicket/websocket')
+      socket: new WebSocket('ws://localhost:8080/printTicket/websocket')
     }
   },
   created() {
@@ -64,7 +64,7 @@ export default {
               id: this.id,
               totalMoney: this.totalMoney,
               ticketNumber: this.ticketNumber,
-              userName: dataObj.name
+              userName: dataObj.data
             }
           })
         }

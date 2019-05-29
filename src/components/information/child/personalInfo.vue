@@ -21,6 +21,13 @@
         <div class="left">开卡日期</div>
         <div class="right">{{data.buyTime}}</div>
       </li>
+
+      <li style="height:auto;display: flex;justify-content: space-between;align-items:center;" v-if="data.project">
+        <div style="color:#1f68bf;float:left;">项目余次</div>
+        <div style="float:right;">
+          <div style="color: #666;" v-for="(item, index) of data.project" :key="index">{{item.type}}: {{item.num}}次</div>
+        </div>
+      </li>
     </ul>
   </div>
 </template>

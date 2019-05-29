@@ -10,7 +10,10 @@
         <router-view class="view two" name="annunciate"></router-view>
       </keep-alive>
       <!-- 内容区域 -->
-      <router-view name="index"></router-view>
+      <keep-alive>
+        <router-view name="index" v-if="$route.meta.keepAlive"></router-view>
+      </keep-alive>
+      <router-view name="index" v-if="!$route.meta.keepAlive"></router-view>
       <!-- 底部广告位 -->
       <keep-alive>
         <router-view  name="myfooter"></router-view>
